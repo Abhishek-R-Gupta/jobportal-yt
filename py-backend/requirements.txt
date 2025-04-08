@@ -1,0 +1,8 @@
+flask
+flask-cors
+python-dotenv
+flask_sqlalchemy
+flask_migrate
+bcrypt
+PyJWT
+cloudinary
