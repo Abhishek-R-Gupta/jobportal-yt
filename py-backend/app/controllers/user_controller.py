@@ -11,7 +11,15 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 def register(req):
     try:
         data = req.form
-        file = req.file
+        print("Form keys:", req.form.keys())
+        print("Files keys:", req.files.keys())
+        file = req.files.get('files')  # remains the same
+
+        if file:
+            print('File is found')
+        if file is None:
+            print("file not found")
+            return jsonify({"error": "No file uploaded with key 'files'"}), 500
 
         fullname = data.get('fullname')
         email = data.get('email')
@@ -23,13 +31,16 @@ def register(req):
         print(f'{fullname} \t {email} \t {phoneNumber} \t {password} \t {role}')
 
         if not all([fullname,email,phoneNumber,password,role]):
+            print("somethng is missing")
             return jsonify({'message':"Something is missing","success":False}),400
-        existing_user = User.query.filter_by(email=email).frst()
+        existing_user = User.query.filter_by(email=email).first()
         if existing_user:
+            print("User already exists with this email")
             return jsonify({'message':'User already exists with this email.','success':False}), 400
         
-        file_uri = get_data_uri(file)
-        cloud_response= upload_to_cloudinary(file_uri['content'])
+        file_uri = get_data_uri(file) if file else None
+        cloud_response = upload_to_cloudinary(file_uri['content']) if file_uri else {}
+
 
         hashed_password = generate_password_hash(password)
 
@@ -37,7 +48,7 @@ def register(req):
             fullname = fullname,
             email = email,
             phoneNumber = phoneNumber,
-            passwpord = password,
+            password = password,
             role = role,
             profilePhoto = cloud_response["secure_url"]
         )
@@ -58,6 +69,9 @@ def login(req):
         email = data.get("email")
         password = data.get('password')
         role = data.get('role')
+
+        print(f' {email} \t {password} \t {role}')
+
 
         if not all([email,password,role]):
             return jsonify({'message':'Soemthing is missing','success':False}),400

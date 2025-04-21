@@ -2,7 +2,9 @@ flask
 flask-cors
 python-dotenv
 flask_sqlalchemy
-flask_migrate
+Flask_Migrate
 bcrypt
 PyJWT
 cloudinary
+psycopg2-binary
+flask_jwt_extended

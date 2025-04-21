@@ -41,7 +41,7 @@ const Signup = () => {
         formData.append("password", input.password);
         formData.append("role", input.role);
         if (input.file) {
-            formData.append("file", input.file);
+            formData.append("files", input.file);
         }
 
         try {
@@ -71,7 +71,7 @@ const Signup = () => {
         <div>
             <Navbar />
             <div className='flex items-center justify-center max-w-7xl mx-auto'>
-                <form onSubmit={submitHandler} className='w-1/2 border border-gray-200 rounded-md p-4 my-10'>
+                <form onSubmit={submitHandler} className='w-1/2 border border-gray-200 rounded-md p-4 my-10' encType="multipart/form-data">
                     <h1 className='font-bold text-xl mb-5'>Sign Up</h1>
                     <div className='my-2'>
                         <Label>Full Name</Label>
@@ -142,6 +142,7 @@ const Signup = () => {
                             <Label>Profile</Label>
                             <Input
                                 accept="image/*"
+                                name="file"
                                 type="file"
                                 onChange={changeFileHandler}
                                 className="cursor-pointer"
